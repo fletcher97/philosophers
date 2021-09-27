@@ -23,7 +23,7 @@
 ################################################################################
 
 # Name of a single binary. Add as many variables as required by the project
-NAME1 := main
+NAME1 := philo
 
 # The names of all the binaries. Add aditional variables created above separated
 # by space.
@@ -94,34 +94,36 @@ SRC_ROOT := src/
 ################################################################################
 
 # Libft
-LIBFT_ROOT := ${LIB_ROOT}libft/
-LIBFT_INC := ${LIBFT_ROOT}inc/
-LIBFT := ${LIBFT_ROOT}bin/libft.a
+# LIBFT_ROOT := ${LIB_ROOT}libft/
+# LIBFT_INC := ${LIBFT_ROOT}inc/
+# LIBFT := ${LIBFT_ROOT}bin/libft.a
 
-INC_DIRS += ${LIBFT_INC}
-LIBS += -L${LIBFT_ROOT}bin -lft
+# INC_DIRS += ${LIBFT_INC}
+# LIBS += -L${LIBFT_ROOT}bin -lft
 
 # Libraries for which to create default targets. All libraries in this list will
 # have targets created autimatically. The targets that are created are set in
 # DEFAULT_LIB_RULES. The targets will have to format <library root>//<target>
 # and it will invoke make as follows:
 # `make -C <library root> <rule>`
-DEFAULT_LIBS := ${LIBFT_ROOT}
+# DEFAULT_LIBS := ${LIBFT_ROOT}
 
 # Default targets to create for libraries specified in DEFAULT_LIBS. This is a
 # small list of common targets in most makefiles.
-DEFAULT_LIB_RULES := all clean re
+# DEFAULT_LIB_RULES := all clean re
 
 # All projects with a copy of this makefile v2.1 and up ate garanteed to work
 # with these targets. If you wish to not use them just comment the lines you
 # don't want.
-DEFAULT_LIB_RULES += fclean clean_all clean_dep
-DEFAULT_LIB_RULES += debug debug_re debug_asan debug_asan_re
+# DEFAULT_LIB_RULES += fclean clean_all clean_dep
+# DEFAULT_LIB_RULES += debug debug_re debug_asan debug_asan_re
 
 # All projects with a copy of this makefile v2.2 and up ate garanteed to work
 # with these targets. If you wish to not use them just comment the lines you
 # don't want.
-DEFAULT_LIB_RULES += debug_tsan debug_tsan_re debug_msan debug_msan_re
+# DEFAULT_LIB_RULES += debug_tsan debug_tsan_re debug_msan debug_msan_re
+
+LIBS += -lpthread
 
 ################################################################################
 # Content Folders
@@ -134,7 +136,7 @@ DEFAULT_LIB_RULES += debug_tsan debug_tsan_re debug_msan debug_msan_re
 # Exemple:
 # DIRS := folder1/:folder2/
 # DIRS += folder1/:folder3/:folder4/
-DIRS := ./
+DIRS := thread/philo/:thread/:common/
 
 SRC_DIRS_LIST := $(addprefix ${SRC_ROOT},${DIRS})
 SRC_DIRS_LIST := $(foreach dl,${SRC_DIRS_LIST},$(subst :,:${SRC_ROOT},${dl}))
