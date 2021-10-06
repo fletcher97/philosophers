@@ -3,3 +3,6 @@
 .vscode
 a.out
 .DS_Store
+bin/
+dep/
+obj/
