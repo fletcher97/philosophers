@@ -3,7 +3,12 @@
 ################################################################################
 
 # Makefile by fletcher97
-# Version: 2.2
+# Version: 2.3
+# Repo: www.github.com/fletcher97/utils
+
+# v2.3: A rule to check if a program can be compiled was added in other to be
+# used for git hooks. A folder with hooks can be found in the same repository
+# this makefile came from.
 
 # As of version 2.2 this Makefile expects an asan.c file to be present in the
 # asan folder inside the SRC_ROOT directory. A copy of the file is provided
@@ -24,10 +29,11 @@
 
 # Name of a single binary. Add as many variables as required by the project
 NAME1 := philo
+NAME2 := philo_bonus
 
 # The names of all the binaries. Add aditional variables created above separated
 # by space.
-NAMES := ${NAME1}
+NAMES := ${NAME1} ${NAME2}
 
 ################################################################################
 # Configs
@@ -137,6 +143,7 @@ LIBS += -lpthread
 # DIRS := folder1/:folder2/
 # DIRS += folder1/:folder3/:folder4/
 DIRS := thread/philo/:thread/:common/
+DIRS += process/philo/:process/:common/
 
 SRC_DIRS_LIST := $(addprefix ${SRC_ROOT},${DIRS})
 SRC_DIRS_LIST := $(foreach dl,${SRC_DIRS_LIST},$(subst :,:${SRC_ROOT},${dl}))
@@ -208,6 +215,12 @@ all: ${BINS}
 
 .SECONDEXPANSION:
 ${BIN_ROOT}${NAME1}: ${LIBFT} $$(call get_files,$${@F},$${OBJS_LIST})
+	${AT}printf "\033[33m[CREATING ${@F}]\033[0m\n" ${BLOCK}
+	${AT}mkdir -p ${@D} ${BLOCK}
+	${AT}${CC} ${CFLAGS} ${INCS} ${ASAN_FILE}\
+		$(call get_files,${@F},${OBJS_LIST}) ${LIBS} -o $@ ${BLOCK}
+
+${BIN_ROOT}${NAME2}: ${LIBFT} $$(call get_files,$${@F},$${OBJS_LIST})
 	${AT}printf "\033[33m[CREATING ${@F}]\033[0m\n" ${BLOCK}
 	${AT}mkdir -p ${@D} ${BLOCK}
 	${AT}${CC} ${CFLAGS} ${INCS} ${ASAN_FILE}\
@@ -306,6 +319,8 @@ targets:
 			{if ($$1 ~ "# makefile") {print $$2}}'\
 		| sort
 
+compile-test: ${addprefix compile-test/,${NAMES}}
+
 ################################################################################
 # .PHONY
 ################################################################################
@@ -317,7 +332,7 @@ targets:
 .PHONY: debug debug_re debug_asan debug_asan_re debug_tsan debug_tsan_re
 
 # Phony utility targets
-.PHONY: targets .FORCE
+.PHONY: targets .FORCE compile-test
 
 # Phony execution targets
 .PHONY: re all
@@ -382,6 +397,13 @@ ${1}/${2}: .FORCE
 	make -C ${1} ${2}
 endef
 
+define make_compile_test_def
+compile-test/${1}: .FORCE
+	$${AT}printf "\033[33m[TESTING $${@F}]\033[0m\n" $${BLOCK}
+	$${AT}$${CC} $${CFLAGS} -fsyntax-only $${INCS} $${ASAN_FILE}\
+		$$(call get_files,$${@F},$${SRCS_LIST}) $${BLOCK}
+endef
+
 ################################################################################
 # Target Generator
 ################################################################################
@@ -401,6 +423,9 @@ $(subst ${SRC_ROOT},${DEP_ROOT},${src:.c=.d}))))
 
 $(foreach lib,${DEFAULT_LIBS},$(foreach target,${DEFAULT_LIB_RULES},$(eval\
 $(call make_lib_def,${lib},${target}))))
+
+$(foreach name,$(NAMES),$(eval\
+$(call make_compile_test_def,${name})))
 
 ################################################################################
 # Includes
