@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/23 00:50:44 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/09/28 00:50:53 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/07 01:09:40 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@
 
 static int	get_forks(t_sym *s, int self)
 {
-	int		i;
 	long	time;
 
-	i = 0;
 	if (pthread_mutex_trylock(&s->forks[self]))
 		return (0);
 	if (!pthread_mutex_trylock(&s->forks[(self + 1) % s->pcount]))
