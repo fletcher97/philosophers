@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   common.h                                           :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/22 22:27:41 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/19 01:14:44 by mgueifao         ###   ########.fr       */
+/*   Created: 2020/11/26 01:22:21 by mgueifao          #+#    #+#             */
+/*   Updated: 2021/10/19 01:12:54 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMON_H
-# define COMMON_H
-
 #include <stddef.h>
 
-int		atoi(const char *str);
-int		ft_isnumber(const char *str);
-void	*ft_calloc(size_t nmemb, size_t size);
-void	*ft_memset(void *s, int c, size_t n);
+void	*ft_memset(void *s, int c, size_t n)
+{
+	unsigned char	*p;
 
-#endif
+	p = s;
+	while (n > 0)
+		p[--n] = c;
+	return (s);
+}

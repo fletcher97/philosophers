@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   common.h                                           :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/22 22:27:41 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/19 01:14:44 by mgueifao         ###   ########.fr       */
+/*   Created: 2020/11/26 01:18:55 by mgueifao          #+#    #+#             */
+/*   Updated: 2021/10/19 01:16:51 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMON_H
-# define COMMON_H
-
 #include <stddef.h>
+#include <stdlib.h>
 
-int		atoi(const char *str);
-int		ft_isnumber(const char *str);
-void	*ft_calloc(size_t nmemb, size_t size);
-void	*ft_memset(void *s, int c, size_t n);
+static int	of_s(size_t s, size_t n)
+{
+	size_t	m;
 
-#endif
+	if (!s)
+		return (0);
+	m = (size_t)(-1);
+	return ((m / s) < n);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	char	*p;
+
+	p = malloc(nmemb * size);
+	if (of_s(nmemb, size) || !p)
+		return (NULL);
+	ft_memset(p, 0, nmemb * size);
+	return ((void *)p);
+}

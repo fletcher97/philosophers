@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 22:17:02 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/09/28 00:56:18 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/19 01:08:43 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	parse_args(int argc, const char *argv[], t_sym *s)
 	s->tdie = atoi(argv[2]);
 	s->teat = atoi(argv[3]);
 	s->tsleep = atoi(argv[4]);
-	s->philos = calloc(s->pcount, sizeof(t_philo));
-	s->forks = calloc(s->pcount, sizeof(pthread_mutex_t));
+	s->philos = ft_calloc(s->pcount, sizeof(t_philo));
+	s->forks = ft_calloc(s->pcount, sizeof(pthread_mutex_t));
 	if (!s->philos || !s->forks)
 		return (0);
 	i = -1;
@@ -104,7 +104,7 @@ int	main(int argc, char const *argv[])
 
 	if (argc < 5 || argc > 6)
 		return (1);
-	s = calloc(sizeof(t_sym), 1);
+	s = ft_calloc(sizeof(t_sym), 1);
 	if (!s || !parse_args(argc, argv, s)
 		|| ((gettimeofday(&s->start, NULL) || 1) && !create_philos(s)))
 	{
