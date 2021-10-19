@@ -6,16 +6,16 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 02:15:15 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/19 01:16:26 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/19 01:19:06 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "common.h"
 #include "philo_bonus.h"
 
-static int check_args(int argc, const char *argv[], t_sym **sym)
+static int	check_args(int argc, const char *argv[], t_sym **sym)
 {
-	t_sym *s;
+	t_sym	*s;
 
 	if (!ft_isnumber(argv[1]) || !ft_isnumber(argv[2]) || !ft_isnumber(argv[3])
 		|| !ft_isnumber(argv[4]) || (argc == 6 && !ft_isnumber(argv[5])))
@@ -36,7 +36,7 @@ static int check_args(int argc, const char *argv[], t_sym **sym)
 	return (1);
 }
 
-int main(int argc, char const *argv[])
+int	main(int argc, char const *argv[])
 {
 	t_sym	*s;
 

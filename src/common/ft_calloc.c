@@ -6,12 +6,12 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 01:18:55 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/19 01:16:51 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/19 01:17:31 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
 #include <stdlib.h>
+#include "common.h"
 
 static int	of_s(size_t s, size_t n)
 {
