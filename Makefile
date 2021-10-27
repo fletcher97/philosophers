@@ -29,7 +29,7 @@
 
 # Name of a single binary. Add as many variables as required by the project
 NAME1 := philo
-NAME2 := philo_bonus
+NAME2 := bonus
 
 # The names of all the binaries. Add aditional variables created above separated
 # by space.
