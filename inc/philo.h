@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 22:21:08 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/09/28 00:01:55 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/27 01:32:22 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef struct s_sym
 	int				teat;
 	int				tsleep;
 	int				eat_count;
+	int				claim;
+	int				start_parity;
 	struct timeval	start;
 	struct timeval	curr;
 	long			currt;

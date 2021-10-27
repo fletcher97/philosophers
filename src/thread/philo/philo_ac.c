@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/23 00:50:44 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/07 01:09:40 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/27 04:46:06 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,80 @@
 
 #include "philo.h"
 
+static int	tr_usleep(t_sym *s, int self, long t)
+{
+	long	start;
+	long	curr;
+	long	sleep;
+
+	start = get_time(s);
+	curr = start;
+	sleep = 100;
+	while ((start + t) > curr)
+	{
+		if (!check_state(s, self))
+			break ;
+		curr = get_time(s);
+		(((curr + 50) < (start + t)) && (sleep = 50));
+		if ((curr + sleep) < (start + t)
+			&& curr + sleep - s->philos[self].last_eat < s->tdie)
+			usleep(sleep);
+		else
+			sleep -= 10;
+		curr = get_time(s);
+	}
+	return (1);
+}
+
+static int	can_wait(t_sym *s, int self)
+{
+	if (s->philos[self].last_eat > 0 && s->teat * 2 > s->tdie)
+		return (0);
+	if (s->philos[self].last_eat > 0 && s->teat * 3 > s->tdie && s->pcount == 3)
+		return (0);
+	return (1);
+}
+
 static int	get_forks(t_sym *s, int self)
 {
 	long	time;
+	int		i;
 
-	if (pthread_mutex_trylock(&s->forks[self]))
+	if (!can_wait(s, self) && tr_usleep(s, self, s->tdie))
 		return (0);
-	if (!pthread_mutex_trylock(&s->forks[(self + 1) % s->pcount]))
+	((self % 2) && (i = self)) || (i = (self + 1) % s->pcount);
+	pthread_mutex_lock(&s->forks[i]);
+	if (!check_state(s, self))
 	{
-		time = get_time(s);
-		printf("%ld %d has taken a fork\n", time, self + 1);
-		printf("%ld %d has taken a fork\n", time, self + 1);
-		return (1);
+		pthread_mutex_unlock(&s->forks[i]);
+		return (0);
 	}
-	pthread_mutex_unlock(&s->forks[self]);
-	return (0);
+	time = get_time(s);
+	printf("%ld %d has taken a fork\n", time, self + 1);
+	((self % 2) && ((i = (self + 1) % s->pcount) || 1)) || (i = self);
+	pthread_mutex_lock(&s->forks[i]);
+	if (!check_state(s, self))
+	{
+		pthread_mutex_unlock(&s->forks[self]);
+		pthread_mutex_unlock(&s->forks[(self + 1) % s->pcount]);
+		return (0);
+	}
+	time = get_time(s);
+	printf("%ld %d has taken a fork\n", time, self + 1);
+	return (1);
 }
 
 int	peat(t_sym *s, int self)
 {
-	while (!get_forks(s, self))
-		if (!check_state(s, self))
-			return (0);
+	if (!get_forks(s, self))
+		return (0);
+	pthread_mutex_lock(&s->master);
+	(!s->start_parity) && (((self % 2) && (s->start_parity = 1))
+		|| (s->start_parity = 2));
+	pthread_mutex_unlock(&s->master);
 	s->philos[self].last_eat = get_time(s);
 	printf("%ld %d is eating\n", s->philos[self].last_eat, self + 1);
-	usleep(s->teat * 1000);
+	tr_usleep(s, self, s->teat);
 	if (s->eat_count != -1 && ++s->philos[self].eat_count == s->eat_count)
 	{
 		pthread_mutex_lock(&s->master);
@@ -48,6 +97,8 @@ int	peat(t_sym *s, int self)
 	}
 	pthread_mutex_unlock(&s->forks[self]);
 	pthread_mutex_unlock(&s->forks[(self + 1) % s->pcount]);
+	if (!check_state(s, self))
+		return (0);
 	return (1);
 }
 
@@ -57,17 +108,8 @@ int	psleep(t_sym *s, int self)
 
 	time = get_time(s);
 	printf("%ld %d is sleeping\n", time, self + 1);
-	if (time + s->tsleep > s->philos[self].last_eat + s->tdie)
-	{
-		usleep((s->philos[self].last_eat + s->tdie - time + 1) * 1000);
-		check_state(s, self);
+	tr_usleep(s, self, s->tsleep);
+	if (!check_state(s, self))
 		return (0);
-	}
-	usleep(s->tsleep * 1000);
 	return (1);
-}
-
-void	pthink(t_sym *s, int self)
-{
-	printf("%ld %d is thinking\n", get_time(s), self + 1);
 }

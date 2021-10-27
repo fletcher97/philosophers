@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 23:06:55 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/09/28 00:30:20 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/27 04:44:56 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@ static int	get_self(t_sym *s)
 {
 	int	i;
 
-	i = -1;
 	pthread_mutex_lock(&s->master);
-	while (++i < s->pcount && s->philos[i].id != pthread_self())
-		;
+	i = s->claim;
+	s->claim++;
 	pthread_mutex_unlock(&s->master);
 	return (i);
 }
@@ -30,18 +29,17 @@ int	check_state(t_sym *s, int self)
 {
 	long	time;
 
+	pthread_mutex_lock(&s->master);
 	time = get_time(s);
 	if (s->pdone == s->pcount)
 	{
-		pthread_mutex_lock(&s->master);
 		if (s->sym_state != sym_halt)
 			s->sym_state = sym_halt;
 		pthread_mutex_unlock(&s->master);
 		return (0);
 	}
-	if (time - s->philos[self].last_eat > s->tdie || s->sym_state == sym_halt)
+	if (time - s->philos[self].last_eat >= s->tdie || s->sym_state == sym_halt)
 	{
-		pthread_mutex_lock(&s->master);
 		if (s->sym_state != sym_halt)
 		{
 			printf("%ld %d died\n", get_time(s), self + 1);
@@ -51,6 +49,7 @@ int	check_state(t_sym *s, int self)
 		pthread_mutex_unlock(&s->master);
 		return (0);
 	}
+	pthread_mutex_unlock(&s->master);
 	return (1);
 }
 
@@ -81,15 +80,17 @@ void	*philo_main(void *arg)
 			break ;
 		if (!check_status(s))
 			break ;
-		else
-			pthink(s, self);
+		printf("%ld %d is thinking\n", get_time(s), self + 1);
 	}
 	return (NULL);
 }
 
 long	get_time(t_sym *s)
 {
+	long	ret;
+
 	gettimeofday(&s->curr, NULL);
-	return ((s->curr.tv_sec - s->start.tv_sec) * 1000
-		+ (s->curr.tv_usec - s->start.tv_usec) / 1000);
+	ret = (s->curr.tv_sec - s->start.tv_sec) * 1000
+		+ (s->curr.tv_usec - s->start.tv_usec) / 1000;
+	return (ret);
 }

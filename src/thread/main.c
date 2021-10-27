@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 22:17:02 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/19 01:08:43 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/27 01:00:36 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,10 @@ int	join_philos(t_sym *s)
 		pthread_mutex_unlock(&s->master);
 	}
 	while (++i < s->pcount)
-		if ((pthread_cancel(s->philos[i].id) || 1)
-			&& pthread_join(s->philos[i].id, NULL))
+	{
+		if (pthread_join(s->philos[i].id, NULL))
 			printf("Join error.\n");
+	}
 	return (1);
 }
 
