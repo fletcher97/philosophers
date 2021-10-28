@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 23:04:25 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/28 03:25:12 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/28 03:33:20 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static void	p_usleep(t_sym *s, int self, int t)
 		while (1)
 			;
 	}
-	usleep(t);
+	usleep(t * 1000);
 }
 
 static void	p_eat(t_sym *s, int self)
 {
 	if ((s->philo.last_eat > 0 && s->teat * 2 >= s->tdie)
 		|| (s->philo.last_eat > 0 && s->teat * 3 >= s->tdie && s->pcount == 3))
-		p_usleep(s, self, s->tdie * 1000);
+		p_usleep(s, self, s->tdie);
 	sem_wait(s->sem_master);
 	sem_wait(s->sem_fork);
 	printf("%ld %d has taken a fork\n", get_time(s), self + 1);
@@ -53,7 +53,7 @@ static void	p_eat(t_sym *s, int self)
 	sem_post(s->sem_master);
 	s->philo.last_eat = get_time(s);
 	printf("%ld %d is eating\n", s->philo.last_eat, self + 1);
-	p_usleep(s, self, s->teat * 1000);
+	p_usleep(s, self, s->teat);
 	s->philo.eat_count++;
 	if (s->philo.eat_count == s->eat_count)
 		sem_post(s->sem_done);
@@ -76,7 +76,7 @@ void	philo_main(t_sym *s, int self)
 	{
 		p_eat(s, self);
 		printf("%ld %d is sleeping\n", get_time(s), self + 1);
-		p_usleep(s, self, s->tsleep * 1000);
+		p_usleep(s, self, s->tsleep);
 		printf("%ld %d is thinking\n", get_time(s), self + 1);
 	}
 }
