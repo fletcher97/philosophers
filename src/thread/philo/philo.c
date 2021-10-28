@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 23:06:55 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/27 04:44:56 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/27 23:31:51 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,13 @@ void	*philo_main(void *arg)
 
 	s = (t_sym *) arg;
 	self = get_self(s);
+	if (s->pcount == 1)
+	{
+		printf("%ld %d has taken a fork\n", get_time(s), self + 1);
+		tr_usleep(s, self, s->tdie);
+		check_state(s, self);
+		return (NULL);
+	}
 	while (1)
 	{
 		if (!check_status(s) || !peat(s, self))

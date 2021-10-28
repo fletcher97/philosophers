@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/23 00:50:44 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/27 04:46:06 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/28 01:02:11 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "philo.h"
 
-static int	tr_usleep(t_sym *s, int self, long t)
+int	tr_usleep(t_sym *s, int self, long t)
 {
 	long	start;
 	long	curr;
@@ -51,21 +51,21 @@ static int	can_wait(t_sym *s, int self)
 
 static int	get_forks(t_sym *s, int self)
 {
-	long	time;
 	int		i;
+	int		bin;
 
+	(void)bin;
 	if (!can_wait(s, self) && tr_usleep(s, self, s->tdie))
 		return (0);
-	((self % 2) && (i = self)) || (i = (self + 1) % s->pcount);
+	bin = ((self % 2) && (i = self)) || (i = (self + 1) % s->pcount);
 	pthread_mutex_lock(&s->forks[i]);
 	if (!check_state(s, self))
 	{
 		pthread_mutex_unlock(&s->forks[i]);
 		return (0);
 	}
-	time = get_time(s);
-	printf("%ld %d has taken a fork\n", time, self + 1);
-	((self % 2) && ((i = (self + 1) % s->pcount) || 1)) || (i = self);
+	printf("%ld %d has taken a fork\n", get_time(s), self + 1);
+	bin = ((self % 2) && ((i = (self + 1) % s->pcount) || 1)) || (i = self);
 	pthread_mutex_lock(&s->forks[i]);
 	if (!check_state(s, self))
 	{
@@ -73,8 +73,7 @@ static int	get_forks(t_sym *s, int self)
 		pthread_mutex_unlock(&s->forks[(self + 1) % s->pcount]);
 		return (0);
 	}
-	time = get_time(s);
-	printf("%ld %d has taken a fork\n", time, self + 1);
+	printf("%ld %d has taken a fork\n", get_time(s), self + 1);
 	return (1);
 }
 

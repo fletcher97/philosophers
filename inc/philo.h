@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 22:21:08 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/27 01:32:22 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/27 23:28:39 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ int		check_state(t_sym *s, int self);
 int		peat(t_sym *s, int self);
 int		psleep(t_sym *s, int self);
 void	pthink(t_sym *s, int self);
+int		tr_usleep(t_sym *s, int self, long t);
 
 #endif
