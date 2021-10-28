@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 22:22:15 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/28 02:32:38 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/28 02:49:55 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ void	*ripper(void *sym)
 	sem_wait(s->sem_died);
 	sem_wait(s->sem_died);
 	if (s->tr_me)
-	{
 		return (NULL);
-	}
 	s->tr_me = 1;
 	i = 0;
 	while (i < s->pcount)
@@ -41,16 +39,12 @@ void	*completionist(void *sym)
 	int		i;
 
 	s = sym;
-	i = -1;
+	i = 0;
 	sem_wait(s->sem_done);
 	while (i++ < s->pcount)
-	{
 		sem_wait(s->sem_done);
-	}
 	if (s->tr_me)
-	{
 		return (NULL);
-	}
 	s->tr_me = 1;
 	i = 0;
 	while (i < s->pcount)
