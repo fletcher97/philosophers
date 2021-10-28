@@ -52,6 +52,8 @@ static void	p_eat(t_sym *s, int self)
 	printf("%ld %d has taken a fork\n", get_time(s), self + 1);
 	sem_post(s->sem_master);
 	s->philo.last_eat = get_time(s);
+	if (!s->philo.last_eat)
+		s->philo.last_eat = 1;
 	printf("%ld %d is eating\n", s->philo.last_eat, self + 1);
 	p_usleep(s, self, s->teat);
 	s->philo.eat_count++;
