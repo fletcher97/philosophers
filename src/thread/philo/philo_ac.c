@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/23 00:50:44 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/28 01:02:11 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/28 03:04:23 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,13 @@ static int	get_forks(t_sym *s, int self)
 	(void)bin;
 	if (!can_wait(s, self) && tr_usleep(s, self, s->tdie))
 		return (0);
-	bin = ((self % 2) && (i = self)) || (i = (self + 1) % s->pcount);
+	bin = (((self % 2)
+				&& (i = self)) || (i = (self + 1) % s->pcount));
 	pthread_mutex_lock(&s->forks[i]);
 	if (!check_state(s, self))
-	{
-		pthread_mutex_unlock(&s->forks[i]);
-		return (0);
-	}
+		return (pthread_mutex_unlock(&s->forks[i]) && 0);
 	printf("%ld %d has taken a fork\n", get_time(s), self + 1);
-	bin = ((self % 2) && ((i = (self + 1) % s->pcount) || 1)) || (i = self);
+	bin = (((self % 2) && ((i = (self + 1) % s->pcount) || 1)) || (i = self));
 	pthread_mutex_lock(&s->forks[i]);
 	if (!check_state(s, self))
 	{

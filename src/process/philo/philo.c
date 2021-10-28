@@ -6,7 +6,7 @@
 /*   By: mgueifao <mgueifao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 23:04:25 by mgueifao          #+#    #+#             */
-/*   Updated: 2021/10/28 02:46:47 by mgueifao         ###   ########.fr       */
+/*   Updated: 2021/10/28 03:01:49 by mgueifao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static long	get_time(t_sym *s)
 
 static void	p_usleep(t_sym *s, int self, int t)
 {
-	long time;
+	long	time;
 
 	if (t <= 0)
 		return ;
